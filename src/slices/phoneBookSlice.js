@@ -23,6 +23,8 @@ export const addContact = createAsyncThunk("contacts/addContact", async (contact
         console.log("data = ", data)
         const res = await data.json()
         console.log("res = ", res)
+
+        return res
     } catch (error) {
         console.log(error)
     }
@@ -31,7 +33,9 @@ export const addContact = createAsyncThunk("contacts/addContact", async (contact
 
 export const deleteContact = createAsyncThunk("contacts/deleteContact", async (id) => { 
     try {
-        
+        const data = await fetch(`https://61d32435b4c10c001712b7ec.mockapi.io/contacts/${id}`, { method: 'DELETE' }) 
+        const res = await data.json()
+        return res
     } catch (error) {
         console.log(error)
     }
@@ -41,8 +45,8 @@ export const phoneBookSlice = createSlice({
     name: 'contacts',
     initialState,
     reducers: {
-        remove: (state, action) => { state.contactsList = state.contactsList.filter((contact) => contact.id !== action.payload)},
-        add: (state, action) => {state.contactsList = action.payload},
+        // remove: (state, action) => { state.contactsList = state.contactsList.filter((contact) => contact.id !== action.payload)},
+        // add: (state, action) => {state.contactsList = action.payload},
         search: (state, action) => {state.filter = action.payload}
     },
     extraReducers: builder => { 
@@ -55,6 +59,8 @@ export const phoneBookSlice = createSlice({
         state.loading = false
     }).addCase(addContact.fulfilled, (state, action) => { 
         state.contactsList.push(action.payload)
+    }).addCase(deleteContact.fulfilled, (state, action) => { 
+        state.contactsList = state.contactsList.filter((contact) => contact.id !== action.payload.id)
     })
 }
 })

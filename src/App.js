@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import Notiflix from "notiflix";
-import shortid from "shortid";
+// import shortid from "shortid";
 import Loader from "react-loader-spinner";
 import ContactForm from "./Components/ContactForm/ContactForm";
 import ContactList from "./Components/ContactList/ContactList";
@@ -9,7 +9,7 @@ import Filter from "./Components/Filter/Filter";
 import "./App.css";
 
 
-import { getContacts, addContact, remove, add, search } from './slices/phoneBookSlice' 
+import { getContacts, addContact, deleteContact, search } from './slices/phoneBookSlice' 
 
 const App = () => {
   const contacts = useSelector(state => state.contacts.contactsList)
@@ -17,6 +17,12 @@ const App = () => {
   const loading = useSelector(state => state.contacts.loading)
 
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getContacts())
+  }, [dispatch])
+
+  console.log(contacts)
 
   const addContactHandler = (name, number) => {
     console.log(name, number)
@@ -26,10 +32,10 @@ const App = () => {
     ).length;
     if (!doubledNames) {
       const contact = {
-        createdAt: null,
+        createdAt: "ksjvbsd",
         name: name,
         phone: number,
-        id: shortid.generate()
+        id: '1'
       };
       dispatch(addContact(contact))
     } else {
@@ -41,19 +47,9 @@ const App = () => {
     }
   };
 
-  const deleteContact = (contactId) => {
-    dispatch(remove(contactId))
+  const deleteContactHandler = (contactId) => {
+    dispatch(deleteContact(contactId))
   };
-
-  useEffect(() => {
-    dispatch(getContacts())
-  }, [dispatch])
-
-  console.log(contacts)
-
-  // useEffect(() => {
-  //   localStorage.setItem("contacts", JSON.stringify(contacts));
-  // }, [contacts]);
 
   const changeFilter = (e) => {
     dispatch(search(e.currentTarget.value))
@@ -71,8 +67,7 @@ const App = () => {
       <h2>Contacts</h2>
       <Filter onChange={changeFilter} value={filter} />
       {loading && <Loader type="MutatingDots" color="#91FCA8 " secondaryColor="#FF9F9F" height={100} width={100}/>}
-    
-      {!loading &&  <ContactList contacts={visibleContacts} onDeleteContact={deleteContact} />}
+      {!loading &&  <ContactList contacts={visibleContacts} onDeleteContact={deleteContactHandler} />}
     </div>
   );
 };
