@@ -20,10 +20,7 @@ export const getContacts = createAsyncThunk("contacts/getContacts", async () => 
 export const addContact = createAsyncThunk("contacts/addContact", async (contactData) => { 
     try {
         const data = await fetch('https://61d32435b4c10c001712b7ec.mockapi.io/contacts', { method: 'POST', body: JSON.stringify(contactData) })
-        console.log("data = ", data)
         const res = await data.json()
-        console.log("res = ", res)
-
         return res
     } catch (error) {
         console.log(error)

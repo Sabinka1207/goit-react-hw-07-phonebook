@@ -32,10 +32,10 @@ const App = () => {
     ).length;
     if (!doubledNames) {
       const contact = {
-        createdAt: "ksjvbsd",
+        // createdAt: "ksjvbsd",
         name: name,
         phone: number,
-        id: '1'
+        // id: '1'
       };
       dispatch(addContact(contact))
     } else {
